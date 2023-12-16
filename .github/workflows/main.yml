@@ -3,7 +3,7 @@ name: github actions workflow
 on:
   pull_request:
     branches:
-      - '*'
+      - 'newBranch'
   workflow_dispatch:
 
 
