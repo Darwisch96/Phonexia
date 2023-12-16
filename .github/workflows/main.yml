@@ -46,4 +46,4 @@ jobs:
           version: 3.13.0 
 
       - name: Package Helm Chart
-        run: helm package . --version 0.1.$(git rev-parse --short HEAD)
+        run: helm package . --version ${{ matrix.chart_version }}
