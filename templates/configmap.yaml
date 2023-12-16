@@ -4,6 +4,6 @@ metadata:
   name: {{.Values.configmap.name}}
 data:
   index.html: |
-    k8s rulezz
+    k8s rulez
   index2.html: |
     Hello from index2.html
