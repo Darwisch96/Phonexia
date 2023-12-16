@@ -1,0 +1,49 @@
+name: github actions workflow
+
+on:
+  pull_request:
+    branches:
+      - '*'
+
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 3.13.0 
+      - name: Run Helm Lint
+        run: helm lint .
+
+  template:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 3.13.0 
+
+      - name: Run Helm Template
+        run: helm template .
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: 3.13.0 
+
+      - name: Package Helm Chart
+        run: helm package . --version $(git rev-parse --short HEAD)
