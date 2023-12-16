@@ -49,4 +49,4 @@ jobs:
           version: 3.13.0 
 
       - name: Package Helm Chart
-        run: helm package . --version {{GITHUB_RUN_NUMBER}}
+        run: helm package . --version 1.0.${{ github.run_number }}
