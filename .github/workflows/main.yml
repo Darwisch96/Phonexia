@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - '*'
+  workflow_dispatch:
 
 
 jobs:
@@ -46,4 +47,4 @@ jobs:
           version: 3.13.0 
 
       - name: Package Helm Chart
-        run: helm package . --version 1.0.1
+        run: helm package . --version {{ matrix.chart_version }}
