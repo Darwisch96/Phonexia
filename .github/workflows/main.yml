@@ -49,7 +49,20 @@ jobs:
 
       - name: Package Helm Chart
         run: helm package . --version 1.0.${{ github.run_number }}
-  
+  diff:
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Fetch changes from pull request branch
+        run: |
+          git fetch origin refs/pull/${{ github.event.pull_request.number }}/merge:pr_branch
+
+      - name: Show Helm chart differences
+        run: |
+          git diff --name-only origin/pr_branch..HEAD
   output-differences:
     needs: diff
     runs-on: ubuntu-latest
