@@ -50,6 +50,10 @@ jobs:
       - name: Set Package Version
         id: set_version
         run: echo ::set-output name=package_version::$(git rev-parse --short ${{ github.sha }})
+      - name: Add private key
+        run: |
+          mkdir ~/.ssh
+          echo {{secrets.PRIVATE_SSH_KEY}} > ~/.ssh/id_rsa
   
       - name: Helm Package
         run: |
@@ -70,17 +74,15 @@ jobs:
           git commit -m "push packaged helm chart"
           
 
-      - name: Configure Git Credentials
-        run: |
-          echo "machine github.com login ${{ secrets.GH_USERNAME }} password ${{ secrets.TOKEN }}" > ~/.netrc 
+      # - name: Configure Git Credentials
+      #   run: |
+      #     echo "machine github.com login ${{ secrets.GH_USERNAME }} password ${{ secrets.TOKEN }}" > ~/.netrc 
 
       - name: Set Git Remote
-        run: git remote add origin1 https://github.com/AbdelrhmanAli123/my-helm-charts.git || true
-        env:
-          DESTINATION_REPO: ${{ secrets.DESTINATION_REPO }}
+        run: git remote add origin2 https://github.com/AbdelrhmanAli123/my-helm-charts.git || true
+        # env:
+        #   DESTINATION_REPO: ${{ secrets.DESTINATION_REPO }}
 
       - name: Push Helm Chart to Remote Repo
         run: |
-          git push https://github.com/AbdelrhmanAli123/my-helm-charts.git main 
-        env:
-          DESTINATION_REPO: ${{ secrets.DESTINATION_REPO }}
+          git push origin2 main 
