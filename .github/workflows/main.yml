@@ -72,6 +72,7 @@ jobs:
         git checkout ${GITHUB_SHA}
         committed_chart=$(helm template .)
         echo "----------------------------------------------"
+        echo ${GITHUB_SHA}
         echo ${committed_chart} 
         echo "----------------------------------------------"        
 
@@ -81,6 +82,7 @@ jobs:
         git checkout pr_branch
         pr_chart=$(helm template .)
         echo "----------------------------------------------"
+        echo ${GITHUB_SHA}
         echo ${pr_chart} 
         echo "----------------------------------------------"        
         # Compare charts
