@@ -64,13 +64,14 @@ jobs:
       uses: azure/setup-helm@v1
       with:
         version: 3.13.0 
-
+    - name: Get Pull Request Number
+       id: pr
+       run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+       env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
   
     - name: Diff Helm Charts
-      run: |
-        env:
-          GH_TOKEN: ${{ github.token }}
-          
+      run: |          
         # Fetch the committed chart
         git checkout ${GITHUB_SHA}
         committed_chart=$(helm template .)
