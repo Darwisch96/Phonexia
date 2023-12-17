@@ -64,11 +64,11 @@ jobs:
       uses: azure/setup-helm@v1
       with:
         version: 3.13.0 
-    - name: Get Pull Request Number
-      id: pr
-      run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
-      env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+    # - name: Get Pull Request Number
+    #   id: pr
+    #   run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.TOKEN }}
   
     - name: Diff Helm Charts
       run: |          
@@ -82,7 +82,7 @@ jobs:
         echo "----------------------------------------------"        
 
         # Fetch the chart from the pull request
-        git fetch origin pull/${{ needs.set_pull_request_number.outputs.pull_request_number }}/head:pr_branch
+        git fetch origin pull/${{ github.event.pull_request.id }}/head:pr_branch
         git checkout pr_branch
         pr_chart=$(helm template .)
         echo "----------------------------------------------"
