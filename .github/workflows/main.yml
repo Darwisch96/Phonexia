@@ -3,9 +3,8 @@ name: github actions workflow
 on:
   pull_request:
     branches:
-      - 'main'
+      - '*'
   workflow_dispatch:
-
 
 jobs:
   lint:
@@ -49,6 +48,16 @@ jobs:
           version: 3.13.0 
 
       - name: Package Helm Chart
-        run: helm package . --version 1.2.${{ github.run_number }}
+        run: helm package . --version 1.0.${{ github.run_number }}
 
+  diff:
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
+      - name: Show Helm chart differences
+        run: |
+          git fetch origin pull/${{ github.event.pull_request.number }}/head:pr_branch
+          git diff --no-index --name-only HEAD pr_branch/.
