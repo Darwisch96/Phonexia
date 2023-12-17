@@ -70,7 +70,7 @@ jobs:
       run: |
         # Fetch the committed chart
         git checkout ${GITHUB_SHA}
-        committed_chart=$(helm template ./path/to/your/chart)
+        committed_chart=$(helm template .)
         
         # Fetch the chart from the pull request
         git fetch origin pull/${{ github.event.pull_request.number }}/head:pr_branch
