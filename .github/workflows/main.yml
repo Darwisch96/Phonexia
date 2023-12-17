@@ -53,4 +53,4 @@ jobs:
   
       - name: Helm Package
         run: |
-          helm package -d ./path/to/your/repo/packages ./path/to/your/chart
+          helm package -d . .
