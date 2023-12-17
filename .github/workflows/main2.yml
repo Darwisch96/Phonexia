@@ -55,8 +55,10 @@ jobs:
         run: |
           mkdir helm-package
           ls 
-          helm package -d . .
+          helm package -d . . --version 1.0.${{ github.run_number  }}
           ls helm-package
+          echo "--------"
+          mv helm-releas* helm-package
 
       - name: Set up Git
         run: |
@@ -73,7 +75,7 @@ jobs:
           echo "machine github.com login ${{ secrets.GH_USERNAME }} password ${{ secrets.TOKEN }}" > ~/.netrc 
 
       - name: Set Git Remote
-        run: git remote add origin https://github.com/AbdelrhmanAli123/DESTINATION_REPO.git 
+        run: git remote add origin1 https://github.com/AbdelrhmanAli123/DESTINATION_REPO.git || true
         env:
           DESTINATION_REPO: ${{ secrets.DESTINATION_REPO }}
 
