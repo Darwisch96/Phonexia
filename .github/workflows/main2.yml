@@ -1,4 +1,4 @@
-name: second work flow
+name: second workflow
 
 on:
   pull_request:
@@ -20,3 +20,78 @@ jobs:
           version: 3.13.0 
       - name: Run Helm Lint
         run: helm lint .
+  template:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 3.13.0 
+
+      - name: Run Helm Template
+        run: helm template .
+
+  package:
+    needs: template
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: 3.13.0 
+
+      - name: Set Package Version
+        id: set_version
+        run: echo ::set-output name=package_version::$(git rev-parse --short ${{ github.sha }})
+  
+      - name: Helm Package
+        run: |
+          helm package -d . .
+  diff:
+    runs-on: ubuntu-latest
+    needs: package
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Setup Helm
+      uses: azure/setup-helm@v1
+      with:
+        version: 3.13.0 
+    # - name: Get Pull Request Number
+    #   id: pr
+    #   run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.TOKEN }}
+  
+    - name: Diff Helm Charts
+      run: |          
+        # Fetch the committed chart
+        git checkout ${GITHUB_SHA}
+        committed_chart=$(helm template .)
+        echo "----------------------------------------------"
+        echo ${GITHUB_SHA}
+        echo "----------------------------------------------"
+        echo ${committed_chart} 
+        echo "----------------------------------------------"        
+
+        # Fetch the chart from the pull request
+        git fetch origin pull/${{ github.event.pull_request.number }}/head:pr_branch
+        git checkout pr_branch
+        pr_chart=$(helm template .)
+        echo "----------------------------------------------"
+        echo ${GITHUB_SHA}
+        echo "----------------------------------------------"
+        echo ${pr_chart} 
+        echo "----------------------------------------------"        
+        # Compare charts
+        diff_output=$(diff -u <(echo "$committed_chart") <(echo "$pr_chart") || true)
+        
+        # Print the differences
+        echo ${diff_output}
