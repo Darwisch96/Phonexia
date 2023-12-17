@@ -75,7 +75,7 @@ jobs:
         # Fetch the chart from the pull request
         git fetch origin pull/${{ github.event.pull_request.number }}/head:pr_branch
         git checkout pr_branch
-        pr_chart=$(helm template ./path/to/your/chart)
+        pr_chart=$(helm template .)
         
         # Compare charts
         diff_output=$(diff -u <(echo "$committed_chart") <(echo "$pr_chart") || true)
