@@ -81,6 +81,6 @@ jobs:
 
       - name: Push Helm Chart to Remote Repo
         run: |
-          git push origin main 
+          git push origin1 main 
         env:
           DESTINATION_REPO: ${{ secrets.DESTINATION_REPO }}
