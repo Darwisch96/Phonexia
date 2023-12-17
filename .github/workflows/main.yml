@@ -82,7 +82,7 @@ jobs:
         echo "----------------------------------------------"        
 
         # Fetch the chart from the pull request
-        git fetch origin pull/${{ steps.pr.outputs.pull_request_number }}/head:pr_branch
+        git fetch origin pull/${{ needs.set_pull_request_number.outputs.pull_request_number }}/head:pr_branch
         git checkout pr_branch
         pr_chart=$(helm template .)
         echo "----------------------------------------------"
