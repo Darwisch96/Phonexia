@@ -65,9 +65,9 @@ jobs:
       with:
         version: 3.13.0 
     - name: Get Pull Request Number
-       id: pr
-       run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
-       env:
+      id: pr
+      run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+      env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
   
     - name: Diff Helm Charts
