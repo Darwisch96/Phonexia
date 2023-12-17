@@ -75,7 +75,7 @@ jobs:
           echo "machine github.com login ${{ secrets.GH_USERNAME }} password ${{ secrets.TOKEN }}" > ~/.netrc 
 
       - name: Set Git Remote
-        run: git remote add origin1 https://github.com/AbdelrhmanAli123/DESTINATION_REPO.git || true
+        run: git remote add origin1 https://github.com/AbdelrhmanAli123/my-helm-charts.git || true
         env:
           DESTINATION_REPO: ${{ secrets.DESTINATION_REPO }}
 
