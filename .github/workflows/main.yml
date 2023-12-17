@@ -51,13 +51,17 @@ jobs:
         run: helm package . --version 1.0.${{ github.run_number }}
 
   diff:
-    needs: package
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+  needs: package
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Show Helm chart differences
-        run: |
-          git fetch origin pull/${{ github.event.pull_request.number }}/head:pr_branch
-          git diff --no-index --name-only HEAD pr_branch/.
+    - name: Fetch changes from pull request branch
+      run: git fetch origin pull/${{ github.event.pull_request.number }}/merge:pr_branch
+      continue-on-error: true
+
+    - name: Show Helm chart differences
+      run: |
+        git diff --no-index --name-only HEAD pr_branch/.
+
