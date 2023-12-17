@@ -1,4 +1,4 @@
-name: github actions workflow
+name: second work flow
 
 on:
   pull_request:
