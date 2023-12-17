@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
           - name: {{.Values.cronjob1.containerName}}
-            image: {{.Values.cronjob1.image}}  # Replace with an image that supports shell commands
+            image: {{.Values.cronjob1.image}}  # Replace with an image that 
             command:
               - "/bin/sh"
               - "-c"
