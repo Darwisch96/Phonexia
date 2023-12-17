@@ -3,7 +3,7 @@ name: github actions workflow
 on:
   pull_request:
     branches:
-      - 'main'
+      - '*'
   workflow_dispatch:
 
 jobs:
@@ -50,30 +50,16 @@ jobs:
       - name: Package Helm Chart
         run: helm package . --version 1.0.${{ github.run_number }}
   
-  diff:
-    needs: package
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Fetch changes from pull request branch
-        run: |
-          git fetch origin refs/pull/${{ github.event.pull_request.number }}/merge:pr_branch
-
-      - name: Show Helm chart differences
-        run: |
-          git diff --name-only origin/pr_branch..HEAD
-
   output-differences:
-    needs: diff
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+  needs: diff
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Show differences with committed Helm chart
-        run: |
-          git diff --name-status ${{ github.base_ref }}..HEAD
-  
+    - name: Show differences with committed Helm chart
+      run: |
+        git fetch origin ${GITHUB_BASE_REF}:${GITHUB_BASE_REF}
+        git diff --name-status $GITHUB_BASE_REF..HEAD
+
   
