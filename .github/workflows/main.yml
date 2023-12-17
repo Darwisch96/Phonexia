@@ -68,6 +68,9 @@ jobs:
   
     - name: Diff Helm Charts
       run: |
+        env:
+          GH_TOKEN: ${{ github.token }}
+          
         # Fetch the committed chart
         git checkout ${GITHUB_SHA}
         committed_chart=$(helm template .)
