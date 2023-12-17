@@ -47,10 +47,10 @@ jobs:
         with:
           version: 3.13.0 
 
-    - name: Set Package Version
-      id: set_version
-      run: echo ::set-output name=package_version::$(git rev-parse --short ${{ github.sha }})
-
-    - name: Helm Package
-      run: |
-        helm package -d ./path/to/your/repo/packages ./path/to/your/chart
+      - name: Set Package Version
+        id: set_version
+        run: echo ::set-output name=package_version::$(git rev-parse --short ${{ github.sha }})
+  
+      - name: Helm Package
+        run: |
+          helm package -d ./path/to/your/repo/packages ./path/to/your/chart
