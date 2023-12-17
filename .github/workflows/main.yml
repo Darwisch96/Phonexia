@@ -56,7 +56,7 @@ jobs:
           helm package -d . .
   diff:
     runs-on: ubuntu-latest
-    needs: [lint, template, package]
+    needs: package
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
