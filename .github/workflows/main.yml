@@ -56,12 +56,24 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-  
+
       - name: Fetch changes from pull request branch
-        run: git fetch origin pull/${{ github.event.pull_request.number }}/merge:pr_branch
-  
+        run: |
+          git fetch origin refs/pull/${{ github.event.pull_request.number }}/merge:pr_branch
+
       - name: Show Helm chart differences
         run: |
           git diff --name-only origin/pr_branch..HEAD
+
+  output-differences:
+    needs: diff
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Show differences with committed Helm chart
+        run: |
+          git diff --name-status ${{ github.base_ref }}..HEAD
   
   
