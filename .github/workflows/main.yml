@@ -71,14 +71,20 @@ jobs:
         # Fetch the committed chart
         git checkout ${GITHUB_SHA}
         committed_chart=$(helm template .)
+        echo "----------------------------------------------"
+        echo ${committed_chart} 
+        echo "----------------------------------------------"        
+
         
         # Fetch the chart from the pull request
         git fetch origin pull/${{ github.event.pull_request.number }}/head:pr_branch
         git checkout pr_branch
         pr_chart=$(helm template .)
-        
+        echo "----------------------------------------------"
+        echo ${pr_chart} 
+        echo "----------------------------------------------"        
         # Compare charts
         diff_output=$(diff -u <(echo "$committed_chart") <(echo "$pr_chart") || true)
         
         # Print the differences
-        echo "$diff_output"
+        echo ${diff_output}
