@@ -55,9 +55,8 @@ jobs:
         run: |
           mkdir helm-package
           ls 
-          helm package -d ./ ./helm-package
+          helm package -d . .
           ls helm-package
-          cd helm-package
 
       - name: Set up Git
         run: |
